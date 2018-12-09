@@ -6,32 +6,102 @@
 // denoted by n!, is the product of all positive integers less than or equal to n.
 // Example: 5! = 5 x 4 x 3 x 2 x 1 = 120
 // factorial(5); // 120
-var factorial = function(n) {
+var factorial = function(n) { 
+	if(n < 0) {
+		return null;
+	}
+	//Base case n = 0
+	if(n === 0) {
+		return 1;
+	}
+
+	return (n * factorial(n -1)); 
 };
 
 // 2. Compute the sum of an array of integers.
 // sum([1,2,3,4,5,6]); // 21
 var sum = function(array) {
+	//if array is empty, return 0
+	if(array.length === 0) {
+		return 0;
+	}
+	//else
+	  //return value of 1 + sum([2,3,4,5,6]), 2 + sum([3,4,5,6])....
+	  return array[0] + sum(array.slice(1));
 };
 
 // 3. Sum all numbers in an array containing nested arrays.
 // arraySum([1,[2,3],[[4]],5]); // 15
 var arraySum = function(array) {
+	var sum = 0;
+    // if array is empty, return 0;
+	
+	for(var i = 0 ; i < array.length; i++) {
+		if(Array.isArray(array[i])) {
+			sum += arraySum(array[i]);
+		} else {
+			sum += array[i];
+		}	
+	}	
+		// if statment to interate through array inside array --> sum
+	return sum; 
 };
 
 // 4. Check if a number is even.
-var isEven = function(n) {
+var isEven = function(n) { //n = 8, n = 6, n = 4
+	//base case: if n === 0, return true; 
+	if(n === 0) {
+		return true;
+	} 
+	// else if n === 1, return false;
+	else if (n === 1) {
+		return false;
+	}
+	// else if n < 0, return isEven(n + 2)
+	else if(n < 0) {
+		return isEven(n + 2);
+	}
+	// else isEven(n- 2)
+	else {
+		return isEven(n - 2);
+	}
 };
 
 // 5. Sum all integers below a given integer.
-// sumBelow(10); // 45
+// sumBelow(10); // 45 ... 9 + 8 + 7 + 6, 5, 4, 3, 2, 1
 // sumBelow(7); // 21
 var sumBelow = function(n) {
+	
+	if( n === 0 ) {
+		return 0;
+	}
+	else if(n > 0) {
+		return (n-1) + sumBelow(n-1);  
+	}
+	else { 
+		return (n+1) + sumBelow(n+1);                   
+	}
+	// if n = 0 , return 0 (base case)
+	//else if positive numbers 
+	// else  for negative numbers 
+
 };
 
 // 6. Get the integers within a range (x, y).
 // range(2,9); // [3,4,5,6,7,8]
-var range = function(x, y) {
+var range = function(x, y) { // x: start,  y: end
+	if (y - x === 2) {  // e.g range(2,4): return should be 3
+	    return [x + 1];
+	} 
+	else if ((y - x === 0) || (y - x < 0)) { // e.g range(2,2) or range(2,3) return should be 0
+		return 0; 
+	}
+	else {
+	    var result = range(x, y - 1); 
+	    result.push(y - 1);
+	    console.log(result);
+	    return result;
+	}
 };
 
 // 7. Compute the exponent of a number.
@@ -40,6 +110,15 @@ var range = function(x, y) {
 // exponent(4,3); // 64
 // https://www.khanacademy.org/computing/computer-science/algorithms/recursive-algorithms/a/computing-powers-of-a-number
 var exponent = function(base, exp) {
+	if (exp === 0) { // e.g 3^0 = 1, 100^0 = 1, (-2)^0 = 1
+		return 1;
+	}
+	else if (exp < 0) { // e.g 4^-1 = 1/4, 3^-2 = 1/3^2 
+		return 1/base * exponent(base, exp+1);  // e.g: 4^-3 = 1/(4*(4*(4*(1))
+	}
+	else {
+		return base * exponent(base, exp-1);  // e.g: 4^3 = (4*(4*(4*(1))
+	}
 };
 
 // 8. Determine if a number is a power of two.
@@ -47,16 +126,44 @@ var exponent = function(base, exp) {
 // powerOfTwo(16); // true
 // powerOfTwo(10); // false
 var powerOfTwo = function(n) {
+	// n = 1 : return 2 according to expect(powerOfTwo(1)).to.be.true;
+	// n < 1 : return false because of null
+	// n > 2 : e.g 8 = (((8/2)/2)/2)
+	return n == 1 ? true : (n < 1 ? false : powerOfTwo(n / 2));
 };
 
 // 9. Write a function that reverses a string.
 var reverse = function(string) {
+	if (string.length === 0) {
+		return "";
+	}
+	// e.g string = "Hello"
+	return string[string.length - 1] + reverse(string.substring(0, string.length - 1)); 
 };
-
 // 10. Write a function that determines if a string is a palindrome.
 var palindrome = function(string) {
-};
+	var firstChar = function(string) { // getting first character from string
+	    return string.slice(0, 1);
+	};
 
+	var lastChar = function(string) { // getting last character from string
+	    return string.slice(-1);
+	};
+
+	var middleChars = function(string) { // getting characters from string except of first and last characters
+	    return string.slice(1, -1);
+	};
+
+	if (string.length < 2) { // if a string is single character retrn should be true.  e.g: "A"
+        return true;
+    }
+
+    if (firstChar(string) == lastChar(string)) { // e.g "eeyee"
+        return palindrome(middleChars(string));
+    }
+
+    return false;
+};
 // 11. Write a function that returns the remainder of x divided by y without using the
 // modulo (%) operator.
 // modulo(5,2) // 1
