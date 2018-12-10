@@ -89,18 +89,17 @@ var sumBelow = function(n) {
 
 // 6. Get the integers within a range (x, y).
 // range(2,9); // [3,4,5,6,7,8]
-var range = function(x, y) { // x: start,  y: end
-	if (y - x === 2) {  // e.g range(2,4): return should be 3
-	    return [x + 1];
-	} 
-	else if ((y - x === 0) || (y - x < 0)) { // e.g range(2,2) or range(2,3) return should be 0
-		return 0; 
+var range = function(x, y) {
+	//base case: if (x - y = 0 || y - x = 1) return []; 
+	if( x - y === 0 || y - x === 1 || y - x === -1) {
+		return [];
 	}
-	else {
-	    var result = range(x, y - 1); 
-	    result.push(y - 1);
-	    console.log(result);
-	    return result;
+	//if x is greater than y, return array starting from x-1 to y
+	if(x > y) {
+		return [x - 1].concat(range(x-1, y));  // needs to be exclusive of y 
+	} else {
+	  //else, return array starting from x+1 to y -1;
+		return [x + 1].concat(range(x+1, y));
 	}
 };
 
@@ -110,26 +109,43 @@ var range = function(x, y) { // x: start,  y: end
 // exponent(4,3); // 64
 // https://www.khanacademy.org/computing/computer-science/algorithms/recursive-algorithms/a/computing-powers-of-a-number
 var exponent = function(base, exp) {
-	if (exp === 0) { // e.g 3^0 = 1, 100^0 = 1, (-2)^0 = 1
+	if(exp === 0) {
 		return 1;
 	}
-	else if (exp < 0) { // e.g 4^-1 = 1/4, 3^-2 = 1/3^2 
-		return 1/base * exponent(base, exp+1);  // e.g: 4^-3 = 1/(4*(4*(4*(1))
-	}
-	else {
-		return base * exponent(base, exp-1);  // e.g: 4^3 = (4*(4*(4*(1))
+	if(exp === 1) {
+		return base;
+	} 
+	if(exp < 0) {
+		return 1/base * ((exponent(base, (exp + 1))).toFixed(4)) 
+	} else {
+	return base * (exponent(base, exp -1))
 	}
 };
 
+
+// 3 ^ -3 = -27 
 // 8. Determine if a number is a power of two.
 // powerOfTwo(1); // true
 // powerOfTwo(16); // true
 // powerOfTwo(10); // false
 var powerOfTwo = function(n) {
-	// n = 1 : return 2 according to expect(powerOfTwo(1)).to.be.true;
-	// n < 1 : return false because of null
-	// n > 2 : e.g 8 = (((8/2)/2)/2)
-	return n == 1 ? true : (n < 1 ? false : powerOfTwo(n / 2));
+    // n = 1 : return 2 according to expect(powerOfTwo(1)).to.be.true;
+    // n < 1 : return false because of null
+    // n > 2 : e.g 8 = (((8/2)/2)/2)
+    return n == 1 ? true : (n < 1 ? false : powerOfTwo(n / 2));
+
+
+	//base case 
+	// if (n === 1) {
+	// 	return true; 
+	// } 
+	// if (n === 0 || n % 2 === 1) {
+	// 	return false; 
+	// }
+
+ //  // recursive 
+ //  return powerOfTwo(n / 2);
+
 };
 
 // 9. Write a function that reverses a string.
@@ -138,32 +154,52 @@ var reverse = function(string) {
 		return "";
 	}
 	// e.g string = "Hello"
-	return string[string.length - 1] + reverse(string.substring(0, string.length - 1)); 
+	return string[string.length - 1] + reverse(string.substring(0, string.length - 1));  // o+(Hell), ol+(Hel), oll+(He), olle+(H), olleH
+	// what is method substring()?
+	// var str = "Hello world!";
+    // var res = str.substring(1, 4);  output: ell
 };
+
+
+// var result = '';
+
+// if(string.length === 0 ){
+// 	return result;
+// 	}
+// return (reverse(string.substr(1))) + string.charAt(0);
+
+// }
+
+
 // 10. Write a function that determines if a string is a palindrome.
 var palindrome = function(string) {
-	var firstChar = function(string) { // getting first character from string
-	    return string.slice(0, 1);
-	};
-
-	var lastChar = function(string) { // getting last character from string
-	    return string.slice(-1);
-	};
-
-	var middleChars = function(string) { // getting characters from string except of first and last characters
-	    return string.slice(1, -1);
-	};
-
-	if (string.length < 2) { // if a string is single character retrn should be true.  e.g: "A"
-        return true;
-    }
-
-    if (firstChar(string) == lastChar(string)) { // e.g "eeyee"
-        return palindrome(middleChars(string));
-    }
-
-    return false;
+  	if (string === '' || string.length === 1) { 
+  		return true; 
+  	} 
+  	if (string[0].toLowerCase() !== string.slice(-1).toLowerCase()) { // comparing with first character(if first characer is capital) and second character
+  		return false; 
+  	}
+  	return palindrome(string.substr(1, string.length - 2));
+  	// e.g 'E y e'
+  	// palindrome(' y ')
+  	// palindrome('y') => return true
 };
+
+
+// if(string.length === 0) {
+// 	return null;
+// }
+// if(string.length === 1) {
+// 	return true;
+// }
+// if(string[0].toLowerCase()!==string[string.length -1].toLowerCase()) {
+// 	return false;
+// }
+// 	return palindrome(string.substr(1,string.length-2));
+
+
+// };
+
 // 11. Write a function that returns the remainder of x divided by y without using the
 // modulo (%) operator.
 // modulo(5,2) // 1
