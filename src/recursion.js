@@ -122,7 +122,6 @@ var exponent = function(base, exp) {
 	}
 };
 
-
 // 3 ^ -3 = -27 
 // 8. Determine if a number is a power of two.
 // powerOfTwo(1); // true
