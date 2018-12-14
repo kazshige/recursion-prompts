@@ -116,7 +116,7 @@ var divide = function(x, y) {
     return 0;
   }
   if(x > 0 && y > 0){
-   return 1 + divide(x-y, y);
+   return 1 + divide(x-y, y)
   }
 };
 
