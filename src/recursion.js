@@ -85,7 +85,6 @@ var modulo = function(x, y) {
 // 12. Write a function that multiplies two numbers without using the * operator or
 // Math methods.
 var multiply = function(x, y) { 
-
   if(y === 0){
     return 0;
   }
